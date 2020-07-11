@@ -1,0 +1,114 @@
+{% extends 'hod_template/base_template.html' %}
+{% load static %}
+{% block title_content %}Add Staff{% endblock %}
+{% block main_content %}
+    <section class="content">
+     <div class="container-fluid">
+         <div class="card card-primary">
+             <div class="card-header">
+                <h3 class="card-title">Forms Add Staff</h3>
+            </div>
+
+         {% if messages %}
+            {% for message in messages %}
+                 {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                {% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                {% endif %}
+            {% endfor %}
+         {% endif %}
+         <form id='myForm' role="form" method="post" action="{% url 'add_staff' %}">
+             {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">First name</label>
+                    {{ form.first_name }}
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Last name</label>
+                    {{ form.last_name }}
+                  </div>
+                     <div class="form-group">
+                    <label for="exampleInputPassword1">Email</label>
+                    {{ form.email }}
+                    </div>
+                    <div class="form-group">
+                    <label for="exampleInputPassword1">Address</label>
+                    {{ form.address }}
+                    </div>
+                   <div class="form-group">
+                    <label for="exampleInputPassword1">Username</label>
+                    {{ form.username }}
+                   </div>
+                   <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    {{ form.password }}
+                   </div>
+                   <div class="form-group">
+                    <label for="exampleInputPassword1">Password again</label>
+                    {{ form.password_again }}
+                   </div>
+                <!-- /.card-body -->
+                <span id="messages"></span>
+                </div>
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-block btn-outline-primary" id="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+         </div>
+    </section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#id_password_again').keyup(function () {
+                 var password = $('#id_password').val();
+                 var password_check = $('#id_password_again').val();
+                 if(password !== password_check){
+                     $('#messages').html('Password are not matching').css('color', 'red');
+
+                 }else{
+                     $('#messages').html('Password are matching').css('color', 'green');
+                 }
+            })
+
+        });
+
+      $('#id_username').focusout(function (e) {
+          e.preventDefault();
+          var username = $('#id_username').val();
+          $.ajax({
+              type: 'GET',
+              url: "{% url 'check_username' %}",
+              data: {'username': username},
+              success: function (response) {
+                  if(!response['valid']){
+                      alert('This username has been exist, please choose another username!');
+                      var username = $('id_username');
+                      username.val('Kakaka');
+                      username.focus();
+                  }
+              },
+              error: function (response) {
+                  console.log(response)
+              }
+          })
+      });
+       function f() {
+              alert("kakaa")
+          }
+    </script>
+{% endblock %}

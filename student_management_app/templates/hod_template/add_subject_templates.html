@@ -1,0 +1,76 @@
+{% extends 'hod_template/base_template.html' %}
+{% load static %}
+{% block title_content %}Add Course{% endblock %}
+{% block main_content %}
+    <section class="content">
+     <div class="container-fluid">
+         <div class="card card-primary">
+             <div class="card-header">
+                <h3 class="card-title">Forms Add Subject</h3>
+            </div>
+         {% if messages %}
+            {% for message in messages %}
+                 {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                  <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                {% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                {% endif %}
+            {% endfor %}
+         {% endif %}
+         <form id='myForm' role="form" method="post" action="{% url 'add_subject' %}">
+             {% csrf_token %}
+                <div class="card-body">
+                    <div class="form-group">
+                    <label for="exampleInputEmail1">Subject name</label>
+                    {{ form.subject_name }}
+                  </div>
+                </div>
+              <div class="card-body">
+                    <div class="form-group">
+                    <label for="exampleInputEmail1">Subject name</label>
+                    {{ form.course_id }}
+                  </div>
+                </div>
+                <!-- /.card-body -->
+                <span id="messages"></span>
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-block btn-outline-primary" id="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+         </div>
+    </section>
+   <script>
+          $('#myForm').onsubmit(function (e) {
+            e.preventDefault();
+            var course_name = $("#id_course_name").val();
+            $.ajax({
+                type: 'GET',
+                url: {% url 'check_course_name' %},
+                data: {'course_name': course_name},
+                success: function (response) {
+                    if(!response['valid']){
+                        alert('This course name have been exists!');
+                        var course_name = $('#id_course_name');
+                        course_name.val('');
+                        course_name.focusin();
+                    }
+                },
+                error: function (response) {
+                  console.log(response);
+                }
+            })
+        });
+   </script>
+{% endblock %}

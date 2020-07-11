@@ -1,0 +1,51 @@
+{% extends 'hod_template/base_template.html' %}
+{% load static %}
+{% block title_content %}Add Student{% endblock %}
+{% block main_content %}
+    <section class="content">
+     <div class="container-fluid">
+         <div class="card card-primary">
+             <div class="card-header">
+                <h3 class="card-title">Forms Add Student</h3>
+            </div>
+         {% if messages %}
+            {% for message in messages %}
+                 {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                {% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                {% endif %}
+            {% endfor %}
+         {% endif %}
+         <form id='myForm' role="form" method="post" action="{% url 'add_student' %}">
+             {% csrf_token %}
+                <div class="card-body">
+{#                   <div class="form-group">#}
+{#                    <label for="exampleInputEmail1">First name</label>#}
+{#                    {{ form_student.first_name }}#}
+{#                  #}
+{#                  </div>#}
+                {{ form_customer }}
+                {{ form_student }}
+                <!-- /.card-body -->
+                <span id="messages"></span>
+                </div>
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-block btn-outline-primary" id="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+         </div>
+    </section>
+{% endblock %}

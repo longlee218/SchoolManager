@@ -1,0 +1,37 @@
+{% extends 'hod_template/base_template.html' %}
+{% load static %}
+{% block title_content %}Add Subject Mul{% endblock %}
+{% block main_content %}
+<form method="post" action="{% url 'do_add_mul' %}">
+{% csrf_token %}
+          <div>
+           <label>Course ID</label>
+               <select id="course_id" name="course_id">
+              {% for i in course %}
+                  <option value="{{ i.id }}">{{ i.course_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+            <div id="table_subject">
+                <label>Subject</label>
+                <input type="text" name="subject_name">
+                <br>
+            </div>
+        <div>
+            <button id="add_course"  type= "button" name="add" onclick="">Add</button>
+        </div>
+
+       <div>
+            <button type="submit">Submit</button>
+       </div>
+</form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+          var html = " <label>Subject</label>\n" +
+              "                <input type=\"text\" name=\"subject_name\">\n" +
+              "                <br>";
+          $('#add_course').click(function () {
+              $('#table_subject').append(html);
+          })
+    </script>
+{% endblock %}
